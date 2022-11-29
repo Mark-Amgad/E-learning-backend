@@ -21,6 +21,7 @@ const getAllMcqCompQuestions = async(req:express.Request,res:express.Response)=>
     }
 }
 
+/*
 const createMcqCompQuestion = async(req:express.Request,res:express.Response)=>{
     try
     {
@@ -34,3 +35,4 @@ const createMcqCompQuestion = async(req:express.Request,res:express.Response)=>{
         res.send("error");
     }
 };
+*/
