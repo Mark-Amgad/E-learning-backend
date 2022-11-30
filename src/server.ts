@@ -1,23 +1,18 @@
 import express from "express";
-import mongoose from "mongoose";
+import mcqComQuestionRoutes from "./routes/McqCompQuestionRouter";
+import MongoDatabase from "./Database/MongoDatabase";
 
-const port = 4040;
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
+
+const port = process.env.PORT || 4040;
 const app = express();
+const database = new MongoDatabase();
 
-app.listen(port,async ()=>{
-    try
-    {
-        await mongoose.connect("mongodb+srv://mark:1234@gp22.qj7riro.mongodb.net/?retryWrites=true&w=majority");
-        console.log("The server is running on port " + port);
-        console.log("Database was connected successfully");
-        //console.log(process.env.PORT);
-    }
-    catch(err)
-    {
-        console.log("There is a problem in the database or in the server");
-    }
-});
+// connect to mongo database
+database.connect();
 
+app.use(mcqComQuestionRoutes);
 
-import McqCompQuestionController from "./controllers/McqCompQuestionController";
-McqCompQuestionController(app);
+app.listen(port, () => console.log(`Server listening on port ${port}!`));
