@@ -31,7 +31,6 @@ const getAllQuestionsType = async(req:express.Request,res:express.Response)=>{
     {
         let category:string = req.params.category;
         category = category.charAt(0).toUpperCase() + category.slice(1);
-        category = category.trim();
         if(category === "Grammar" || category === "Vocabulary")
         {
             const result:McqCompleteQuestion[] = await McqCompleteQuestionModel.find({category:category});
