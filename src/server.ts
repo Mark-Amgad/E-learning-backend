@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-
+import cors from "cors";
+import bodyParser from "body-parser";
 const port = 4040;
 const app = express();
 
@@ -18,6 +19,9 @@ app.listen(port,async ()=>{
     }
 });
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
 
 import McqCompQuestionController from "./controllers/McqCompQuestionController";
 McqCompQuestionController(app);
