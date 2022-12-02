@@ -21,3 +21,9 @@ app.listen(port,async ()=>{
 
 import McqCompQuestionController from "./controllers/McqCompQuestionController";
 McqCompQuestionController(app);
+
+import ListeningReadingQuestionController from "./controllers/ListeningReadingQuestionController";
+ListeningReadingQuestionController(app);
+
+import QuestionController from "./controllers/QuestionController";
+QuestionController(app);
