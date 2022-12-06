@@ -23,11 +23,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
 
-import McqCompQuestionController from "./controllers/McqCompQuestionController";
-McqCompQuestionController(app);
 
-import ListeningReadingQuestionController from "./controllers/ListeningReadingQuestionController";
-ListeningReadingQuestionController(app);
 
-import QuestionController from "./controllers/QuestionController";
-QuestionController(app);
+import Router from "./routes/Routes";
+
+app.use("/",Router);
