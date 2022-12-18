@@ -5,4 +5,4 @@ const textToSpeechRouter = express.Router();
 export default textToSpeechRouter;
 
 
-textToSpeechRouter.get("/:text",GetAudio);
+textToSpeechRouter.get("/",GetAudio);
