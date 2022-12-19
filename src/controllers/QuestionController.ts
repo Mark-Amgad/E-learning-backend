@@ -51,16 +51,33 @@ export default class QuestionController
         }
     }
 
-    async getRandomQuestions(req:express.Request,res:express.Response)
+    async getQuestionsChunk(req:express.Request,res:express.Response)
     {
         try
         {
             let quantity = Number(req.params.quantity);
-            // under development
+            let margin = Number(req.params.margin);
+            let category = String(req.params.category);
+            category = category.charAt(0).toUpperCase() + category.slice(1);
+            if(category === "Grammar" || category === "Vocabulary")
+            {
+                const result:McqCompleteQuestion[] = await McqCompleteQuestionModel.find({category:category}).limit(quantity).skip(margin);
+                res.json({"questions":result});
+            }
+            else if(category === "Listening" || category === "Reading")
+            {
+                const result:ListeningReadingQuestion[] = await ListeningReadingQuestionModel.find({category:category}).limit(quantity).skip(margin);
+                res.json({"questions":result});
+            }
+            else
+            {
+                res.send("wrong category")
+            }
         }
         catch(err)
         {
-
+            // hnadling errors
+            res.send("error");
         }
     }
 }

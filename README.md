@@ -9,3 +9,7 @@ Graduation project 2022
 3- localhost:4040/questions/
 
 4- localhost:4040/questions/:category  (grammar, vocabulary, reading, listening)
+
+5- localhost:4040/questions/:category/:quantity/:margin
+
+(category : grammar,vocabulary.. , quantity : number , margin : number)
