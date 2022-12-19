@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 export function checkForErrors(req, res) {
-  console.log(req);
+  // console.log(req);
   const language = req.body.language;
   const text = req.body.text;
 
@@ -16,7 +16,21 @@ export function checkForErrors(req, res) {
   };
 
   axios.request(options).then(function (response) {
-    console.log(response.data);
+    // console.log(response.data);
+    res.json(response.data);
+  }).catch(function (error) {
+    console.error(error);
+  });
+}
+
+export function getSupportedLanguages(req, res) {
+  const options = {
+    method: 'GET',
+    url: 'https://api.languagetoolplus.com/v2/languages',
+  };
+
+  axios.request(options).then(function (response) {
+    // console.log(response.data);
     res.json(response.data);
   }).catch(function (error) {
     console.error(error);
