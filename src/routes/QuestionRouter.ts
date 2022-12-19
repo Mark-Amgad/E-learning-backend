@@ -13,3 +13,4 @@ const questionController = new QuestionController();
 
 questionsRouter.get("/",questionController.getAllQuestions);
 questionsRouter.get("/:category",questionController.getAllQuestionsType);
+questionsRouter.get("/:category/:quantity/:margin",questionController.getQuestionsChunk);
