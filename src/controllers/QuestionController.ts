@@ -46,7 +46,21 @@ export default class QuestionController
         }
         catch(err)
         {
-            
+            // error handling
+            res.send("error");
+        }
+    }
+
+    async getRandomQuestions(req:express.Request,res:express.Response)
+    {
+        try
+        {
+            let quantity = Number(req.params.quantity);
+            // under development
+        }
+        catch(err)
+        {
+
         }
     }
 }
