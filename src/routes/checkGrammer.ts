@@ -7,3 +7,4 @@ export default checkForErrorsRouter;
 
 checkForErrorsRouter.get("/", checkForErrors);
 checkForErrorsRouter.get("/supportedLanguages", getSupportedLanguages);
+checkForErrorsRouter.get("/wrongSentence", generateWrongSentence);
