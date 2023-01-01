@@ -8,5 +8,6 @@ export default Router;
 
 Router.use("/questions", questionsRouter);
 Router.use("/audio", textToSpeechRouter);
-Router.use("/checkErrors", checkForErrorsRouter)
+Router.use("/checkErrors", checkForErrorsRouter);
+
 

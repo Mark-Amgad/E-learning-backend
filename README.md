@@ -12,4 +12,6 @@ Graduation project 2022
 
 5- localhost:4040/questions/:category/:quantity/:margin
 
+6- localhost:4040/questions/:category/:id
+
 (category : grammar,vocabulary.. , quantity : number , margin : number)

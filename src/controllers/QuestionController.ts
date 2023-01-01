@@ -80,4 +80,39 @@ export default class QuestionController
             res.send("error");
         }
     }
+
+    async deleteQuestion(req:express.Request,res:express.Response):Promise<void>
+    {
+        try
+        {
+            const questionId = Number(req.params.id);
+            const questionType = req.params.category;
+            if(questionType == "vocabulary" || questionType == "grammar")
+            {
+                const result = await McqCompleteQuestionModel.deleteOne({
+                    "_id":questionId,
+                    "type" : questionType
+                });
+
+                res.json({"message" : "Question deleted","code":true});
+            }
+            else if(questionType == "listening" || questionType == "reading")
+            {
+                const result = await ListeningReadingQuestionModel.deleteOne({
+                    "_id":questionId,
+                    "type" : questionType
+                });
+
+                res.json({"message" : "Question deleted","code":true});
+            }
+            else
+            {
+                res.send("wrong type");
+            }
+        }
+        catch(err)
+        {
+            res.send("error ");
+        }
+    }
 }
