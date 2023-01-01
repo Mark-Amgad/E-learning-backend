@@ -36,3 +36,54 @@ export function getSupportedLanguages(req, res) {
     console.error(error);
   });
 }
+
+export function generateWrongSentence(req, res) {
+  // only for test
+  let sentence = getSentence();
+  let incorrectSentence = makeSentenceIncorrect(sentence);
+  res.json(incorrectSentence);
+}
+
+
+/**************************************helper functions*****************************/
+function getSentence() {
+  let arr = ["I am abdou", "there is an apple", "he is mohamed", "English is very beautiful", "there are a lot to learn", "play football every day"];
+  let randNumber = Math.floor(Math.random() * arr.length)
+  return arr[randNumber];
+}
+
+function makeSentenceIncorrect(sentence) {
+  let words = sentence.split(' ');
+  // [correct, incorrect]
+  let verbs = [["am", "is"], ["is", "are"], ["are", "is"], ["this", "these"], ["that", "those"], ["those", "this"], ["these", "that"], ["an", "a"], ["a", "an"], ["many", "much"], ["much", "many"], ["were", "was"], ["was", "were"], ["has", "have"], ["have", "has"], ["had", "has"], ["be", "is"], ["of", "off"], ["off", "of"], ["too", "to"], ["two", "to"], ["to", "two"], ["so", "many"], ["I", "he"], ["he", "we"], ["she", "they"], ["would", "wood"], ["wood", "would"], ["should", "shod"]];
+  for (let i = 0; i < verbs.length; i++) {
+    const verb = verbs[i];
+    let idx = words.findIndex(word => word.toLowerCase() === verb[0].toLowerCase());
+    if (idx != -1) {
+      words[idx] = verb[1];
+      return { sentence: words.join(" "), answer: verb[0] };
+    }
+  };
+
+
+  let letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+  let originalWord = "", newWord = "";
+  do {
+    let randNum = Math.floor(Math.random() * words.length);
+    originalWord = words[randNum];
+    newWord = words[randNum];
+
+    let letter1ToChange = Math.floor(Math.random() * originalWord.length);
+    let letter2ToChange = Math.floor(Math.random() * originalWord.length);
+    let letter1 = Math.floor(Math.random() * 26);
+    let letter2 = Math.floor(Math.random() * 26);
+
+    newWord = newWord.substring(0, letter1ToChange) + letters[letter1] + newWord.substring(letter1ToChange + 1);
+    newWord = newWord.substring(0, letter2ToChange) + letters[letter1] + newWord.substring(letter2ToChange + 1);
+
+    words[randNum] = newWord;
+  } while (newWord === originalWord);
+
+  return { sentence: words.join(" "), answer: originalWord };
+}
