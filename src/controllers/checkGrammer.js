@@ -39,18 +39,30 @@ export function getSupportedLanguages(req, res) {
 
 export function generateWrongSentence(req, res) {
   // only for test
-  let sentence = getSentence();
-  let incorrectSentence = makeSentenceIncorrect(sentence);
-  res.json(incorrectSentence);
+  const options = {
+    method: 'GET',
+    url: 'https://randomwordgenerator.com/json/sentences.json',
+    headers: { "Accept-Encoding": "gzip,deflate,compress" }
+  };
+
+  let sentence = "";
+  axios.request(options).then(function (response) {
+    // console.log(response.data);
+    let arr = response.data.data;
+    let randNumber = Math.floor(Math.random() * arr.length)
+    sentence = arr[randNumber].sentence;
+    let incorrectSentence = makeSentenceIncorrect(sentence);
+    res.json(incorrectSentence);
+
+
+  }).catch(function (error) {
+    console.error(error);
+  });
 }
 
 
 /**************************************helper functions*****************************/
-function getSentence() {
-  let arr = ["I am abdou", "there is an apple", "he is mohamed", "English is very beautiful", "there are a lot to learn", "play football every day"];
-  let randNumber = Math.floor(Math.random() * arr.length)
-  return arr[randNumber];
-}
+
 
 function makeSentenceIncorrect(sentence) {
   let words = sentence.split(' ');
@@ -61,7 +73,7 @@ function makeSentenceIncorrect(sentence) {
     let idx = words.findIndex(word => word.toLowerCase() === verb[0].toLowerCase());
     if (idx != -1) {
       words[idx] = verb[1];
-      return { sentence: words.join(" "), answer: verb[0] };
+      return { sentence: words.join(" "), wrong: verb[1], answer: verb[0] };
     }
   };
 
@@ -85,5 +97,5 @@ function makeSentenceIncorrect(sentence) {
     words[randNum] = newWord;
   } while (newWord === originalWord);
 
-  return { sentence: words.join(" "), answer: originalWord };
+  return { sentence: words.join(" "), wrong: newWord, answer: originalWord };
 }

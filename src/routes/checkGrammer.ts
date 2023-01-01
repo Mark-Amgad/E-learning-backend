@@ -1,4 +1,4 @@
-import { checkForErrors, getSupportedLanguages } from "../controllers/checkGrammer";
+import { checkForErrors, generateWrongSentence, getSupportedLanguages } from "../controllers/checkGrammer";
 import express from "express";
 const checkForErrorsRouter = express.Router();
 
