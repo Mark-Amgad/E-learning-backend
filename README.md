@@ -28,6 +28,11 @@ Graduation project 2022
 
 11- http://localhost:4040/sentence
 
+7- GET /questions/speech2text
+
+8- POST /questions/speech2text
+
+
 (category : grammar,vocabulary.. , quantity : number , margin : number)
 
 ### Users

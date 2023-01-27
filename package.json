@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@google-cloud/speech": "^5.1.0",
     "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.12",
     "@types/jsonwebtoken": "^9.0.1",
