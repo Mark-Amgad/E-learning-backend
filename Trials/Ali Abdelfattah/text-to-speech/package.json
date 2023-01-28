@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@google-cloud/text-to-speech": "^4.0.4",
+    "node-gtts": "^2.0.2"
+  }
+}
