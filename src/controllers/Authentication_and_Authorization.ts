@@ -3,6 +3,7 @@ import {User} from "../models/User";
 
 import express, { Request, Response } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 
 export default class Authentication
@@ -47,10 +48,26 @@ export default class Authentication
             const user = await UserModel.findOne({email:email});
             if(user === null)
             {
-                return res.send("this user doesn't exist");
+                return  res.json({"message":"Wrong email"});
             }
-            console.log(user);
-            res.send("true");
+            const correctPassword = user.password;
+            const checkPassword = bcrypt.compareSync(password, correctPassword);
+            console.log(checkPassword);
+            if(checkPassword === true)
+            {
+                // generate JWT TOKEN
+                let payload = {
+                    email:email,
+                    fname:user.firstName
+                };
+                let token = Authentication.generateJwt(payload);
+                return res.json({"message":"Success login","token":token});
+            }
+            else
+            {
+                return res.json({"message":"Wrong password"});
+            }
+            //res.send("true");
         }
         catch(err)
         {
@@ -64,5 +81,12 @@ export default class Authentication
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(plainText, salt);
         return hash;
+    }
+
+    static generateJwt(data:object)
+    {
+        // data must be an object
+        const token = jwt.sign(data,"KEY");
+        return token;
     }
 }
