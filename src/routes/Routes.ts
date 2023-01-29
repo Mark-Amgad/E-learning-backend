@@ -1,4 +1,5 @@
 import questionsRouter from "./QuestionRouter";
+import AuthRouter from "./Autherntication";
 import textToSpeechRouter from "./TextToSpeechRouter";
 import express from "express";
 import checkForErrorsRouter from "./checkGrammer";
@@ -9,5 +10,6 @@ export default Router;
 Router.use("/questions", questionsRouter);
 Router.use("/audio", textToSpeechRouter);
 Router.use("/checkErrors", checkForErrorsRouter);
+Router.use("/auth",AuthRouter);
 
 

@@ -14,7 +14,7 @@ export interface User
 }
 
 let userSchema = new Schema<User>({
-    firstName:{String,required:true},
+    firstName:{type:String,required:true},
     lastName:{type:String},
     email:{type:String,required:true},
     password:{type:String,required:true},
@@ -24,3 +24,6 @@ let userSchema = new Schema<User>({
     scores:[{type:String}],
     imageUrl:String
 });
+
+const UserModel = model<User>("User",userSchema);
+export default UserModel;
