@@ -86,7 +86,7 @@ export default class Authentication
     static generateJwt(data:object)
     {
         // data must be an object
-        const token = jwt.sign(data,"KEY");
+        const token = jwt.sign(data,"KEY", {expiresIn: "10m"});
         return token;
     }
 }
