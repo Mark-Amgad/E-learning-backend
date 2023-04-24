@@ -3,6 +3,7 @@ import AuthRouter from "./Autherntication";
 import textToSpeechRouter from "./TextToSpeechRouter";
 import express from "express";
 import checkForErrorsRouter from "./checkGrammer";
+import userRouter from "./UserRouter";
 
 const Router = express.Router();
 export default Router;
@@ -11,5 +12,6 @@ Router.use("/questions", questionsRouter);
 Router.use("/audio", textToSpeechRouter);
 Router.use("/checkErrors", checkForErrorsRouter);
 Router.use("/auth",AuthRouter);
+Router.use("/users",userRouter);
 
 

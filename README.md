@@ -2,18 +2,32 @@
 Graduation project 2022
 
 ## Ready endpoints
-1- localhost:4040/mcq
+1- http://localhost:4040/mcq
 
-2- localhost:4040/lr
+2- http://localhost:4040/lr
 
-3- localhost:4040/questions/
+3- http://localhost:4040/questions/
 
-4- localhost:4040/questions/:category  (grammar, vocabulary, reading, listening)
+4- http://localhost:4040/questions/:category
 
-5- localhost:4040/questions/:category/:quantity/:margin
+(grammar, vocabulary, reading, listening)
 
-6- localhost:4040/questions/:category/:id
+5- http://localhost:4040/questions/:category/:quantity/:margin
+
+6- http://localhost:4040/questions/:category/:id
 
 (category : grammar,vocabulary.. , quantity : number , margin : number)
 
-7- localhost:4040/auth/login
+
+### Users
+7- http://localhost:4040/auth/signup
+
+8- http://localhost:4040/auth/login
+
+9- http://localhost:4040/users
+
+10- http://localhost:4040/users/:email
+
+11- http://localhost:4040/users/update
+
+12- http://localhost:4040/users/:email

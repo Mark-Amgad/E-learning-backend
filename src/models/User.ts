@@ -16,7 +16,7 @@ export interface User
 let userSchema = new Schema<User>({
     firstName:{type:String,required:true},
     lastName:{type:String},
-    email:{type:String,required:true},
+    email:{type:String,required:true,unique: true},
     password:{type:String,required:true},
     level:{type:Number},
     verified:{type:Boolean},
