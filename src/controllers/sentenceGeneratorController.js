@@ -10,7 +10,5 @@ export function getSentence(req, res){
         const $ = cheerio.load(body);
         // Print the text nodes of the <table> in the HTML
         res.send($('#random_word').text());
-    });
-    
-    
+    });        
 }
