@@ -15,7 +15,51 @@ from scipy.sparse import csr_matrix
 from sklearn.metrics import confusion_matrix
 
 
+def count_syllables(word):
+    syllable_count = 0
+    vowels = 'aeiouy'
+    if word[0] in vowels:
+        syllable_count += 1
+    for index in range(1, len(word)):
+        if word[index] in vowels and word[index - 1] not in vowels:
+            syllable_count += 1
+    if word.endswith('e'):
+        syllable_count -= 1
+    if word.endswith('le') and len(word) > 2 and word[-3] not in vowels:
+        syllable_count += 1
+    if syllable_count == 0:
+        syllable_count += 1
+    return syllable_count
+
+def calculate_syllables(sentence, which):
+    num_1to3 = 0
+    num_4ormore = 0
+    sentence = sentence.split(" ")
+    for word in sentence:
+        num = count_syllables(word)
+        if num > 3:
+            num_4ormore += 1
+        else:
+            num_1to3 +=1
+    if (which == 1):
+        return num_1to3
+    elif(which == 2):
+        return num_4ormore
+
 df = pd.read_csv('dataset.csv')
+
+
+columns = {"syllables 3":[],
+           "syllables 4": [],
+           "sentence length":[]
+           }
+for value in df.itertuples():
+    columns["syllables 3"].append(calculate_syllables(value.Sentence, 1))
+    columns["syllables 4"].append(calculate_syllables(value.Sentence, 2))
+    columns["sentence length"].append(len(value.Sentence.split(" ")))
+
+newDF = pd.DataFrame(columns)
+df = df.join(newDF)
 
 tfidf = TfidfVectorizer(sublinear_tf=True, min_df=1, norm='l2', encoding='latin-1', ngram_range=(1, 2), stop_words='english')
 features = tfidf.fit_transform(df.Sentence).toarray()
@@ -43,12 +87,12 @@ print(prediction)
 class ColumnSelector(BaseEstimator, TransformerMixin):
 
     def __init__(self, name=None, position=None,
-                 as_cat_codes=False, sparse=False):
+                 as_cat_codes=False, sparse=False, reshape=False):
         self.name = name
         self.position = position
         self.as_cat_codes = as_cat_codes
         self.sparse = sparse
-
+        self.reshape = reshape
     def fit(self, X, y=None):
         return self
 
@@ -65,6 +109,8 @@ class ColumnSelector(BaseEstimator, TransformerMixin):
             ret = X.iloc[:, col_pos]
         if self.sparse:
             ret = csr_matrix(ret.values.reshape(-1,1))
+        if self.reshape:
+            ret = ret.values.reshape(-1,1)
         return ret
 
 union = FeatureUnion([
@@ -76,9 +122,31 @@ union = FeatureUnion([
              ]) ),
             ('ads',
              Pipeline([
-                ('select', ColumnSelector('tense_id', sparse=True,
+                ('select', ColumnSelector('tense_id', sparse=False,reshape=True,
                                           as_cat_codes=True)),
                 #('scale', StandardScaler(with_mean=False)),
+                #('encode', OneHotEncoder(handle_unknown='ignore'))
+             ]) ),
+            ('syllables3',
+             Pipeline([
+                ('select', ColumnSelector('syllables 3', sparse=True,
+                                          as_cat_codes=True)),
+                #('scale', StandardScaler(with_mean=False)),
+                #('encode', OneHotEncoder(handle_unknown='ignore'))
+             ]) ),
+            ('syllables4',
+             Pipeline([
+                ('select', ColumnSelector('syllables 4', sparse=True,
+                                          as_cat_codes=True)),
+                #('scale', StandardScaler(with_mean=False)),
+                #('encode', OneHotEncoder(handle_unknown='ignore'))
+             ]) ),
+            ('sentenceLen',
+             Pipeline([
+                ('select', ColumnSelector('sentence length', sparse=True,
+                                          as_cat_codes=True)),
+                #('scale', StandardScaler(with_mean=False)),
+                #('encode', OneHotEncoder(handle_unknown='ignore'))
              ]) )
         ])
 
@@ -115,7 +183,7 @@ param_grid = [
 
 gs_kwargs = dict(cv=3, n_jobs=1, verbose=2)
 X_train, X_test, y_train, y_test = \
-    train_test_split(df[['Sentence','tense_id']], df['level_id'], test_size=0.25)
+    train_test_split(df[['Sentence','tense_id','syllables 3','syllables 4','sentence length']], df['level_id'], test_size=0.25)
 grid = GridSearchCV(pipe, param_grid=param_grid, **gs_kwargs)
 grid.fit(X_train, y_train)
 
@@ -135,3 +203,10 @@ plt.xlabel('Predicted')
 plt.show()
 
 pickle.dump(grid, open("Model.sav", "wb"))
+
+
+
+
+
+
+        
