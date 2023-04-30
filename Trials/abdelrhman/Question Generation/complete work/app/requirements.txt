@@ -1,0 +1,14 @@
+git+https://github.com/boudinfl/pke.git
+transformers==4.6.1
+onnx
+onnxruntime==1.7.0 
+progress>=1.5
+sentencepiece
+fastt5==0.0.4
+fastapi
+pydantic
+psutil
+strsim==0.0.3
+sense2vec==2.0.0
+sentence-transformers
+flashtext
