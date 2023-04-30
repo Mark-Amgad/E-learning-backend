@@ -30,12 +30,13 @@ export default class Authentication
                 }
             );
             await newUser.save();
-            return res.send("user created");
+            console.log('user created');
+            return res.json({"message":"user created"});
         }
         catch(err)
         {
             console.log(err);
-            res.send("error in sign up");
+            res.json({"message":"error in sign-up"});
         }
     }
 
@@ -45,6 +46,8 @@ export default class Authentication
         {
             const email:string = req.body.email;
             const password:string = req.body.password;
+            console.log(email)
+            console.log(password)
             const user = await UserModel.findOne({email:email});
             if(user === null)
             {
