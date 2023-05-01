@@ -2,6 +2,8 @@ const request = require("request");
 const cheerio = require('cheerio');
 import { spawn } from "child_process";
 import path from "path";
+import SentenceModel from "../models/Sentence";
+import { Sentence } from "../models/Sentence";
 
 
 export async function getSentence(req, res) {
@@ -15,10 +17,12 @@ export async function getSentence(req, res) {
     // Print the text nodes of the <table> in the HTML
     sentence = $('#random_word').text();
     console.log(path.resolve('python/sentenceClassifier.py'));
-    const python = spawn('python', [path.resolve('python/sentenceClassifier.py'), sentence]);
+    const python = spawn('python', [path.resolve('src/python/sentenceClassifier.py'), sentence]);
 
-    python.stdout.on('data', function (data) {
+    python.stdout.on('data', async function (data) {
       text = data.toString();
+      let sentenceObject = new SentenceModel({"text":sentence,"level":text});
+      await sentenceObject.save();
       res.send(text + " " + sentence);
     });
 
