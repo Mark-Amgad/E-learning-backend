@@ -13,9 +13,10 @@ export default Router;
 Router.use("/questions", questionsRouter);
 Router.use("/audio", textToSpeechRouter);
 Router.use("/checkErrors", checkForErrorsRouter);
-Router.use("/auth",AuthRouter);
-Router.use("/users",userRouter);
-Router.use("/tests/",testRouter);
-Router.use("/sentence",sentenceGeneratorRouter);
+Router.use("/auth", AuthRouter);
+Router.use("/users", userRouter);
+Router.use("/tests/", testRouter);
+Router.use("/sentence", sentenceGeneratorRouter);
+Router.use("/generateReadingQuestion", sentenceGeneratorRouter);
 
 
