@@ -13,13 +13,15 @@ let transfer = async(req:Request,res:Response)=>{
         let mcqQuestions = await McqCompleteQuestionModel.find({},{_id:0});
         await QuestionModel.insertMany(mcqQuestions);
 
-        
+
+        // NOTE : the bext statment delete everything in the destiny collection
+        /*
         let pipline = [
             {$project:{question:"$header", url:"$ImageUrl",subQuestions:"$questions",category:1,level:1}},
             {$out:"questions"}
         ];
         let result = await ListeningReadingQuestionModel.aggregate(pipline);
-        
+        */
         
         res.json({"2":"added"});
     }

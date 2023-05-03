@@ -6,6 +6,7 @@ interface ITest extends Document {
   questions: IQuestion[];
   answers: string[];
   score: number;
+  category : string;
   createdAt: Date;
 }
 
@@ -15,6 +16,7 @@ const TestSchema = new Schema(
     questions: [{ type: Schema.Types.ObjectId, required: true, ref: "Question" }],
     answers: [{ type: String }],
     score: { type: Number },
+    category: {type:String,require:true},
     createdAt: { type: Date, default: Date.now },
   },
 );

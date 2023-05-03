@@ -29,5 +29,5 @@ import Router from "./routes/Routes";
 
 app.use("/",Router);
 
-import {transfer} from "./controllers/mongoScripts";
-app.get("/transfer",transfer);
+//import {transfer} from "./controllers/mongoScripts";
+//app.get("/transfer",transfer);

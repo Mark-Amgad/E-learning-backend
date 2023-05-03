@@ -8,11 +8,17 @@ export class TestController
     {
         try
         {
-
+            let category = req.body.category;
+            let size = Number(req.body.size);
+            let allQuestions = await QuestionModel.find({category : category}).limit(10);
+            console.log(allQuestions);
+            allQuestions.sort(()=>Math.random()-0.5);
+            //console.log(allQuestions);
+            res.json(allQuestions);
         }
         catch(err)
         {
-
+            res.json("Error");
         }
     }
 
