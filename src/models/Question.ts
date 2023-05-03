@@ -29,9 +29,10 @@ const QuestionSchema = new Schema<IQuestion>({
     }],
     choices:[{type:String, required:false}],
     answer:{type:String, required:false},
-    type:{type:String, required:true},
+    type:{type:String, required:false},
     category:{type:String, required:true},
-    level:{type:String, required:true}
+    level:{type:String, required:true},
+    url:{type:String,required:false}
 });
 
 

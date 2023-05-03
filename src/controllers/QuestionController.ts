@@ -10,6 +10,9 @@ import express from "express";
 
 export default class QuestionController
 {
+    
+
+
     async getAllQuestions(req:express.Request,res:express.Response){
         try
         {
