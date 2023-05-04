@@ -38,6 +38,7 @@ export class TestController
                 numberOfQuestions : size
             });
             await newTest.save();
+            // add submited indicator
             res.json(newTest);
         }
         catch(err)
