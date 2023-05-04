@@ -4,12 +4,10 @@ const axios = require("axios");
 
 
 export async function generateReadingQuestion(req, res) {
-    console.log("111111111111111111")
     let level = req.params.level;
-    console.log(req.params.level)
-    // level ="A1"
+    // console.log(req.params.level)
     let paragraph = await ParagraphModel.findOne({ "level": level })
-    console.log(paragraph)
+    // console.log(paragraph)
     // const encodedParams = new URLSearchParams();
     // encodedParams.append("context", paragraph.text);
     // encodedParams.append("n_mcq", 4);
@@ -26,9 +24,9 @@ export async function generateReadingQuestion(req, res) {
     };
 
     axios.request(options).then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         let questions = response.data["questions"];
-        console.log(questions)
+        // console.log(questions)
         let insertedQuestions = []
 
         for (let ques of questions) {
