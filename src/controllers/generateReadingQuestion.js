@@ -1,5 +1,5 @@
 import ParagraphModel from "../models/Paragraph";
-import ListeningReadingQuestionModel from "../models/ListeningReadingQuestion";
+import Question from "../models/Question";
 const axios = require("axios");
 
 
@@ -19,8 +19,8 @@ export async function generateReadingQuestion(req, res) {
         method: 'POST',
         url: 'http://164.92.176.13/mcq',
         data: {
-            "n_mcq":4,
-            "context":paragraph.text,
+            "context": paragraph.text,
+            "n_mcq": 4,
             "n_ques": 5
         }
     };
@@ -35,19 +35,20 @@ export async function generateReadingQuestion(req, res) {
             insertedQuestions.push({
                 question: ques.question,
                 choices: ques.mcq,
-                answer: ques.answer, 
-                type: "MCQ"
+                answer: ques.answer,
             })
         }
         let readingQuestion = {
-            header: paragraph.text,
-            questions: insertedQuestions,
-            hasImage: false,
-            imageUrl: "",
+            question: paragraph.text,
+            subQuestions: insertedQuestions,
+            choices: [],
+            answer: "",
+            type: "MCQ",
             category: "Reading",
             level: level,
+            url: ""
         }
-        ListeningReadingQuestionModel.collection.insertOne(readingQuestion)
+        Question.collection.insertOne(readingQuestion)
         res.json("Question Generated successfully");
     }).catch(function (error) {
         console.error(error);
