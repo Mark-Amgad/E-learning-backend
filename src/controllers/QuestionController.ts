@@ -12,6 +12,7 @@ export default class QuestionController
 {
     
 
+    // I will update this module to be compatible with the general table
 
     async getAllQuestions(req:express.Request,res:express.Response){
         try
