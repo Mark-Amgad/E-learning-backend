@@ -3,39 +3,49 @@ import ListeningReadingQuestionModel from "../models/ListeningReadingQuestion";
 const axios = require("axios");
 
 
-export function generateReadingQuestion(req, res) {
-    level = req.params.level;
-    paragraph = ParagraphModel.findOne({ "level": level })
-
-    const encodedParams = new URLSearchParams();
-    encodedParams.append("context", paragraph.text);
-    encodedParams.append("n_mcq", 4);
-    encodedParams.append("n_ques", 5);
+export async function generateReadingQuestion(req, res) {
+    console.log("111111111111111111")
+    let level = req.params.level;
+    console.log(req.params.level)
+    // level ="A1"
+    let paragraph = await ParagraphModel.findOne({ "level": level })
+    console.log(paragraph)
+    // const encodedParams = new URLSearchParams();
+    // encodedParams.append("context", paragraph.text);
+    // encodedParams.append("n_mcq", 4);
+    // encodedParams.append("n_ques", 5);
 
     const options = {
         method: 'POST',
         url: 'http://164.92.176.13/mcq',
-        data: encodedParams
+        data: {
+            "n_mcq":4,
+            "context":paragraph.text,
+            "n_ques": 5
+        }
     };
 
     axios.request(options).then(function (response) {
-        // console.log(response.data);
-        questions = response.data["questions"];
-        insertedQuestions = []
-        for (ques in questions) {
-            insertedQuestions.append({
+        console.log(response.data);
+        let questions = response.data["questions"];
+        console.log(questions)
+        let insertedQuestions = []
+
+        for (let ques of questions) {
+            insertedQuestions.push({
                 question: ques.question,
                 choices: ques.mcq,
-                answer: ques.answer, type: "mcq"
+                answer: ques.answer, 
+                type: "MCQ"
             })
         }
-        readingQuestion = {
+        let readingQuestion = {
             header: paragraph.text,
             questions: insertedQuestions,
             hasImage: false,
             imageUrl: "",
-            category: "",
-            level: paragraph.level,
+            category: "Reading",
+            level: level,
         }
         ListeningReadingQuestionModel.collection.insertOne(readingQuestion)
         res.json("Question Generated successfully");
