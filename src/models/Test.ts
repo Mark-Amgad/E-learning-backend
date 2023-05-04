@@ -7,7 +7,9 @@ interface ITest extends Document {
   answers: string[];
   score: number;
   category : string;
+  level:string;
   createdAt: Date;
+  numberOfQuestions:number;
 }
 
 const TestSchema = new Schema(
@@ -17,6 +19,8 @@ const TestSchema = new Schema(
     answers: [{ type: String }],
     score: { type: Number },
     category: {type:String,require:true},
+    level:{type:String,require:true},
+    numberOfQuestions:{type:Number,require:true},
     createdAt: { type: Date, default: Date.now },
   },
 );
