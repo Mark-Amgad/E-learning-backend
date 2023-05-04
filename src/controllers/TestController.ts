@@ -1,7 +1,7 @@
 import { TestModel } from "../models/Test";
 import QuestionModel from "../models/Question";
 import { Request, Response } from "express";
-import UserModel from "../models/User";
+import UserModel,{User} from "../models/User";
 
 export class TestController
 {
@@ -18,14 +18,27 @@ export class TestController
             let email = req.body.email;
             let level = req.body.level;
             let startFrom = await TestController.getStartQuestion(email,level,category);
-            console.log(startFrom);
+
             let allQuestions = await QuestionModel.find(
-                {category : category, level:level}
+                {category : category, level:level},
+                {_id:1}
                 ).skip(startFrom).limit(size);
 
             console.log(allQuestions);
-            // create new test and save it
-            res.json(allQuestions);
+            // get userId
+            let user = await UserModel.find({email:email},{_id:1});
+            let userId = user[0]._id;
+
+
+            let newTest = new TestModel({
+                userId: userId,
+                questions: allQuestions,
+                category:category,
+                level:level,
+                numberOfQuestions : size
+            });
+            await newTest.save();
+            res.json(newTest);
         }
         catch(err)
         {

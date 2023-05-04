@@ -17,7 +17,7 @@ const TestSchema = new Schema(
     userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
     questions: [{ type: Schema.Types.ObjectId, required: true, ref: "Question" }],
     answers: [{ type: String }],
-    score: { type: Number },
+    score: { type: Number,default:0 },
     category: {type:String,require:true},
     level:{type:String,require:true},
     numberOfQuestions:{type:Number,require:true},
