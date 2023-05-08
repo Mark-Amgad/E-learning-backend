@@ -1,7 +1,9 @@
 # E-learning-backend
+
 Graduation project 2022
 
 ## Ready endpoints
+
 1- http://localhost:4040/mcq
 
 2- http://localhost:4040/lr
@@ -16,10 +18,12 @@ Graduation project 2022
 
 6- http://localhost:4040/questions/:category/:id
 
+7- http://localhost:4040/generateReadingQuestion/:level
+
 (category : grammar,vocabulary.. , quantity : number , margin : number)
 
-
 ### Users
+
 7- http://localhost:4040/auth/signup
 
 8- http://localhost:4040/auth/login
