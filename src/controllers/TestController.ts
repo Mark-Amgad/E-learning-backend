@@ -9,14 +9,14 @@ export class TestController
     {
         try
         {
-            let category = req.body.category;
-            let size = Number(req.body.size);
+            let category = req.params.category;
+            let size = Number(req.params.size);
             if(!size)
             {
                 throw new Error("No size existed");
             }
-            let email = req.body.email;
-            let level = req.body.level;
+            let email = req.params.email;
+            let level = req.params.level;
             let startFrom = await TestController.getStartQuestion(email,level,category);
 
             let allQuestions = await QuestionModel.find(
@@ -24,7 +24,7 @@ export class TestController
                 {_id:1}
                 ).skip(startFrom).limit(size);
 
-            console.log(allQuestions);
+            //console.log(allQuestions);
             // get userId
             let user = await UserModel.find({email:email},{_id:1});
             let userId = user[0]._id;
@@ -38,8 +38,9 @@ export class TestController
                 numberOfQuestions : size
             });
             await newTest.save();
-            // add submited indicator
-            res.json(newTest);
+            let result = await newTest.populate("questions");
+            //console.log(result);
+            res.json(result);
         }
         catch(err)
         {
@@ -65,16 +66,15 @@ export class TestController
 
     async submitTest(req:Request,res:Response)
     {
-        console.log("hi");
         try
         {
             let answers:string[][] = req.body.answers;
             let testId:string = req.body.testId;
-            let test = await TestModel.find({id:testId});
-            let trueAnswers = test[0].answers;
-            let score = TestController.evaluate(answers,trueAnswers);
-            console.log(score);
-            res.json(score);
+            await TestModel.updateOne({_id:testId},{answers:answers});
+            let questionInTest = await TestModel.find({_id:testId},{questions:1}).populate("questions");
+            console.log(questionInTest);
+            //let score = TestController.evaluate(answers,trueAnswers);
+            res.json({"all questions":questionInTest});
 
         }
         catch(err)
@@ -92,6 +92,20 @@ export class TestController
         catch(err)
         {
             
+        }
+    }
+
+    async getTest(req:Request,res:Response)
+    {
+        try
+        {
+            let testId = req.params.test_id;
+            let test = await TestModel.findById(testId).populate("questions");
+            res.json(test);
+        }
+        catch(err)
+        {
+            res.json("error");
         }
     }
 
