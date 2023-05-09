@@ -1,4 +1,4 @@
-import { TestModel } from "../models/Test";
+import { ITest, TestModel } from "../models/Test";
 import QuestionModel from "../models/Question";
 import { Request, Response } from "express";
 import UserModel,{User} from "../models/User";
@@ -48,27 +48,38 @@ export class TestController
         }
     }
 
-    async getTest(req:Request,res:Response)
+    async getTests(req:Request,res:Response)
     {
         try
         {
-
+            let email:string = req.params.email;
+            let id = await UserModel.find({email:email},{_id:1});
+            let tests:ITest[] = await TestModel.find({userId:id});
+            res.json(tests);
         }
         catch(err)
         {
-            
+            res.json("Error");
         }
     }
 
     async submitTest(req:Request,res:Response)
     {
+        console.log("hi");
         try
         {
+            let answers:string[][] = req.body.answers;
+            let testId:string = req.body.testId;
+            let test = await TestModel.find({id:testId});
+            let trueAnswers = test[0].answers;
+            let score = TestController.evaluate(answers,trueAnswers);
+            console.log(score);
+            res.json(score);
 
         }
         catch(err)
         {
-            
+            res.json("error");
         }
     }
 
@@ -110,10 +121,29 @@ export class TestController
         catch(err)
         {
             throw new Error("something went wrong in getting the start question");
-        }
-        
-        
+        }  
     }
+
+    static evaluate(answers:string[][] , trueAnswers:string[][]):number
+    {
+        let score = 0;
+        for(let i = 0 ; i < answers.length;i++)
+        {
+            for(let j = 0 ; j < answers[i].length;j++)
+            {
+                if(answers[i][j] == trueAnswers[i][j])
+                {
+                    score++;
+                }
+            }
+        }
+        return score;
+    }
+
+
+
+
+    
 
 
 }

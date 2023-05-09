@@ -4,7 +4,7 @@ import { IQuestion } from "./Question";
 interface ITest extends Document {
   userId: string;
   questions: IQuestion[];
-  answers: string[];
+  answers: string[][];
   score: number;
   category : string;
   level:string;
@@ -16,7 +16,7 @@ const TestSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
     questions: [{ type: Schema.Types.ObjectId, required: true, ref: "Question" }],
-    answers: [{ type: String }],
+    answers: [[{ type: String }]],
     score: { type: Number,default:0 },
     category: {type:String,require:true},
     level:{type:String,require:true},
