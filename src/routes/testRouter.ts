@@ -7,6 +7,7 @@ export default testRouter;
 
 const testController = new TestController();
 
-testRouter.get("/create",testController.createTest);
+testRouter.get("/create/:email/:category/:level/:size",testController.createTest);
 testRouter.get("/:email",testController.getTests);
 testRouter.post("/submit",testController.submitTest);
+testRouter.get("/get/:test_id",testController.getTest);

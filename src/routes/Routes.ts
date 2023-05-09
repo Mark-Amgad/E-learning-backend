@@ -8,7 +8,7 @@ import testRouter from "./testRouter";
 import sentenceGeneratorRouter from "./sentenceGeneratorRouter";
 import generateReadingQuestionRouter from "./generateReadingQuestionRouter";
 import generateVocabQuestionRouter from "./generateVocabQuestionRouter";
-import generateGrammarQuestionRouter from "./generateGrammarQuestionRouter";
+//import generateGrammarQuestionRouter from "./generateGrammarQuestionRouter";
 
 const Router = express.Router();
 export default Router;
@@ -22,6 +22,6 @@ Router.use("/tests/", testRouter);
 Router.use("/sentence", sentenceGeneratorRouter);
 Router.use("/generateReadingQuestion", generateReadingQuestionRouter);
 Router.use("/generateVocabQuestion", generateVocabQuestionRouter);
-Router.use("/generateGrammarQuestion", generateGrammarQuestionRouter);
+//Router.use("/generateGrammarQuestion", generateGrammarQuestionRouter);
 
 

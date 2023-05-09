@@ -9,14 +9,14 @@ export class TestController
     {
         try
         {
-            let category = req.body.category;
-            let size = Number(req.body.size);
+            let category = req.params.category;
+            let size = Number(req.params.size);
             if(!size)
             {
                 throw new Error("No size existed");
             }
-            let email = req.body.email;
-            let level = req.body.level;
+            let email = req.params.email;
+            let level = req.params.level;
             let startFrom = await TestController.getStartQuestion(email,level,category);
 
             let allQuestions = await QuestionModel.find(
@@ -92,6 +92,20 @@ export class TestController
         catch(err)
         {
             
+        }
+    }
+
+    async getTest(req:Request,res:Response)
+    {
+        try
+        {
+            let testId = req.params.test_id;
+            let test = await TestModel.findById(testId).populate("questions");
+            res.json(test);
+        }
+        catch(err)
+        {
+            res.json("error");
         }
     }
 
