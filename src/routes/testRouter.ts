@@ -9,4 +9,4 @@ const testController = new TestController();
 
 testRouter.get("/create",testController.createTest);
 testRouter.get("/:email",testController.getTests);
-testRouter.get("/submit",testController.submitTest);
+testRouter.post("/submit",testController.submitTest);
