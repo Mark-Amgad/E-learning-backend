@@ -53,7 +53,6 @@ body Example :
 
     "testId" : "645acb332790ec92f2dd3d61",
 
-    "answers" : [["mine"],["for"],["twice a"],["wrong answer"],["empty"]]
-    
-}
+    "answers" : [["mine"],["for"],["twice a"],["wrong answer"],["empty"]] 
+    }
 
