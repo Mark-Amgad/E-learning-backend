@@ -20,6 +20,10 @@ Graduation project 2022
 
 7- http://localhost:4040/generateReadingQuestion/:level
 
+7- http://localhost:4040/generateVocabQuestion/:level
+
+7- http://localhost:4040/generateGrammarQuestion/:level
+
 (category : grammar,vocabulary.. , quantity : number , margin : number)
 
 ### Users
