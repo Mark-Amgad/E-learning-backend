@@ -77,6 +77,11 @@ export class TestController
             // get el correct answers .. 
             // if category grammar or vocabulary 
             let correctAnswers = TestController.getCorrectAnswers(testQuestions);
+            let sizeCheck = TestController.checkOnSize(answers,correctAnswers);
+            if(!sizeCheck)
+            {
+                return res.json({"error message" : "wrong answers size"});
+            }
             //console.log(answers);
             //console.log(correctAnswers);
             // evaluate the answers
@@ -155,9 +160,9 @@ export class TestController
     {
         let score = 0;
         let totalScore = 0;
-        for(let i = 0 ; i < answers.length;i++)
+        for(let i = 0 ; i < trueAnswers.length;i++)
         {
-            for(let j = 0 ; j < answers[i].length;j++)
+            for(let j = 0 ; j < trueAnswers[i].length;j++)
             {
                 if(answers[i][j] == trueAnswers[i][j])
                 {
@@ -192,6 +197,22 @@ export class TestController
             }
         }
         return correctAnswers;
+    }
+
+    static checkOnSize(answers:string[][] , trueAnswers:string[][])
+    {
+        if(answers.length != trueAnswers.length)
+        {
+            return false;
+        }
+        for(let i = 0; i < trueAnswers.length; i++)
+        {
+            if(trueAnswers[i].length != answers[i].length)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     
