@@ -79,10 +79,12 @@ export class TestController
             // get el correct answers .. 
             // if category grammar or vocabulary 
             let correctAnswers = TestController.getCorrectAnswers(testQuestions);
+            console.log(answers);
             console.log(correctAnswers);
             // evaluate the answers
             // update score
-            res.json({"all questions":testQuestions});
+            let [score,totalScore] = TestController.evaluate(answers,correctAnswers);
+            res.json({"score":score,"total score":totalScore});
 
         }
         catch(err)
@@ -146,9 +148,10 @@ export class TestController
         }  
     }
 
-    static evaluate(answers:string[][] , trueAnswers:string[][]):number
+    static evaluate(answers:string[][] , trueAnswers:string[][]):number[]
     {
         let score = 0;
+        let totalScore = 0;
         for(let i = 0 ; i < answers.length;i++)
         {
             for(let j = 0 ; j < answers[i].length;j++)
@@ -157,9 +160,10 @@ export class TestController
                 {
                     score++;
                 }
+                totalScore++;
             }
         }
-        return score;
+        return [score , totalScore];
     }
 
     static getCorrectAnswers(questions:any)
@@ -186,6 +190,8 @@ export class TestController
         }
         return correctAnswers;
     }
+
+    
 
 
 
