@@ -1,5 +1,5 @@
 import { ITest, TestModel } from "../models/Test";
-import QuestionModel from "../models/Question";
+import QuestionModel, { IQuestion } from "../models/Question";
 import { Request, Response } from "express";
 import UserModel,{User} from "../models/User";
 
@@ -70,11 +70,21 @@ export class TestController
         {
             let answers:string[][] = req.body.answers;
             let testId:string = req.body.testId;
-            await TestModel.updateOne({_id:testId},{answers:answers});
-            let questionInTest = await TestModel.find({_id:testId},{questions:1}).populate("questions");
-            console.log(questionInTest);
-            //let score = TestController.evaluate(answers,trueAnswers);
-            res.json({"all questions":questionInTest});
+            //await TestModel.updateOne({_id:testId},{answers:answers});
+            let test = await TestModel.findById(testId).populate("questions");
+            let testQuestions = test?.questions;
+            let testCategory = test?.category;
+            // console.log(testQuestions);
+            // console.log(testCategory);
+            // get el correct answers .. 
+            // if category grammar or vocabulary 
+            let correctAnswers = TestController.getCorrectAnswers(testQuestions);
+            console.log(answers);
+            console.log(correctAnswers);
+            // evaluate the answers
+            // update score
+            let [score,totalScore] = TestController.evaluate(answers,correctAnswers);
+            res.json({"score":score,"total score":totalScore});
 
         }
         catch(err)
@@ -138,9 +148,10 @@ export class TestController
         }  
     }
 
-    static evaluate(answers:string[][] , trueAnswers:string[][]):number
+    static evaluate(answers:string[][] , trueAnswers:string[][]):number[]
     {
         let score = 0;
+        let totalScore = 0;
         for(let i = 0 ; i < answers.length;i++)
         {
             for(let j = 0 ; j < answers[i].length;j++)
@@ -149,10 +160,38 @@ export class TestController
                 {
                     score++;
                 }
+                totalScore++;
             }
         }
-        return score;
+        return [score , totalScore];
     }
+
+    static getCorrectAnswers(questions:any)
+    {
+        let correctAnswers:string[][] = [];
+        for(let i = 0; i < questions.length; i++)
+        {
+            if(questions[i].category == "Vocabulary"
+            || questions[i].category == "Grammar")
+            {
+                let answer = questions[i].answer;
+                correctAnswers.push([answer]);
+            }
+            else
+            {
+                let vector = [];
+                for(let j =0 ; j  < questions[i].subQuestions.length;j++)
+                {
+                    vector.push(questions[i].subQuestions[j].answer);
+                }
+                correctAnswers.push(vector);
+                
+            }
+        }
+        return correctAnswers;
+    }
+
+    
 
 
 

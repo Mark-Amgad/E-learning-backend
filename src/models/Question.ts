@@ -7,7 +7,7 @@ export interface IQuestion extends Document
         question:string,
         choices:string[],
         answer:string,
-    }
+    }[],
     choices:string[],
     answer:string,
     type:string,
