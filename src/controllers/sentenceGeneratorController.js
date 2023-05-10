@@ -16,12 +16,14 @@ export async function getSentence(req, res) {
     const $ = cheerio.load(body);
     // Print the text nodes of the <table> in the HTML
     sentence = $('#random_word').text();
-    console.log(path.resolve('python/sentenceClassifier.py'));
+    console.log(path.resolve('src/python/sentenceClassifier.py'));
     const python = spawn('python', [path.resolve('src/python/sentenceClassifier.py'), sentence]);
 
     python.stdout.on('data', async function (data) {
       text = data.toString();
-      let sentenceObject = new SentenceModel({"text":sentence,"level":text});
+      let level = text.split("+")[0]
+      let tense = JSON.parse(text.split("+")[1])
+      let sentenceObject = new SentenceModel({"text":sentence,"level":level,"tenses":tense});
       await sentenceObject.save();
       res.send(text + " " + sentence);
     });

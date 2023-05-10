@@ -1,42 +1,31 @@
 import gtts from "node-gtts";
 import path from "path";
 import fs from "fs";
-import { spawn } from "child_process";
+import SentenceModel from "../models/Sentence";
+import GeneratedListeningQuestionModel from "../models/GeneratedListeningQuestion";
 var g = gtts("en");
-var filepath = path.join(__dirname + "/../audio", 'audio.mp3');
 
 
-export function GetAudio(req, res) {
-
-  let text;
-  const python = spawn('python', [path.resolve('src/python/sentenceGenerator.py')]);
-
-  python.stdout.on('data', function (data) {
-    text = data.toString();
-    fs.writeFile(path.resolve('src/python/test.txt'), text, err => {
-      if (err) {
-        console.error(err);
-      }
+export async function GetAudio(req, res) {
+  let level = req.params.level;
+  console.log({level:level});
+  let sentences = await SentenceModel.find({level:level});
+  let sentence = sentences[Math.floor(Math.random()*sentences.length)];
+  console.log(sentence);
+  let text = sentence.text;
+  var filepath = path.join(__dirname + "/../audio", text +'.mp3');
+  console.log(text);
+  g.save(filepath, text, async function () {
+    // var readStream = fs.createReadStream(filepath);
+    // readStream.pipe(res);
+    let object = new GeneratedListeningQuestionModel({
+      path: "src/audio/"  + text +'.mp3',
+      level: level,
+      answer:text
     });
-    g.save(filepath, text, function () {
-      var readStream = fs.createReadStream(filepath);
-      readStream.pipe(res);
-    });
+    await object.save();
+    res.send("Question Generated Successfuly")
   });
 
-  python.on('close', (data) => {
-    console.log(data.toString());
-    console.log("script closed...");
-  });
 
-}
-
-export function GetText(req, res) {
-  fs.readFile(path.resolve('src/python/test.txt'), 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    res.send({ 'text': data });
-  });
 }

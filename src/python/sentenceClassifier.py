@@ -155,7 +155,13 @@ mapping = {
     'past simple':                           23
 }
 tense = tuple(tenses)
+tense_string = "["
+for t in tense:
+    tense_string += '"' + t + '"'
+    tense_string += ","
+tense_string = tense_string[0:-1]
+tense_string += "]"
 id = mapping[tense[0]]
 example = pd.DataFrame([[sentence,id]],columns=["Sentence","tense_id"])
 predicted = grid.predict(example)
-print(id_to_category[predicted[0]])
+print(id_to_category[predicted[0]] + "+" + tense_string)

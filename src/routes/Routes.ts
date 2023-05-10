@@ -14,7 +14,6 @@ const Router = express.Router();
 export default Router;
 
 Router.use("/questions", questionsRouter);
-Router.use("/audio", textToSpeechRouter);
 Router.use("/checkErrors", checkForErrorsRouter);
 Router.use("/auth", AuthRouter);
 Router.use("/users", userRouter);
@@ -23,5 +22,6 @@ Router.use("/sentence", sentenceGeneratorRouter);
 Router.use("/generateReadingQuestion", generateReadingQuestionRouter);
 Router.use("/generateVocabQuestion", generateVocabQuestionRouter);
 Router.use("/generateGrammarQuestion", generateGrammarQuestionRouter);
+Router.use("/generateListeningQuestion", textToSpeechRouter);
 
 
