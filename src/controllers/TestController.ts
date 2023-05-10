@@ -70,20 +70,23 @@ export class TestController
         {
             let answers:string[][] = req.body.answers;
             let testId:string = req.body.testId;
-            //await TestModel.updateOne({_id:testId},{answers:answers});
             let test = await TestModel.findById(testId).populate("questions");
             let testQuestions = test?.questions;
-            let testCategory = test?.category;
             // console.log(testQuestions);
             // console.log(testCategory);
             // get el correct answers .. 
             // if category grammar or vocabulary 
             let correctAnswers = TestController.getCorrectAnswers(testQuestions);
-            console.log(answers);
-            console.log(correctAnswers);
+            //console.log(answers);
+            //console.log(correctAnswers);
             // evaluate the answers
             // update score
             let [score,totalScore] = TestController.evaluate(answers,correctAnswers);
+            await TestModel.updateOne({_id:testId},{
+                answers:answers,
+                score:score,
+                numberOfQuestions:totalScore
+            });
             res.json({"score":score,"total score":totalScore});
 
         }
