@@ -1,8 +1,8 @@
-// import { generateGrammarQuestion } from "../controllers/generateGrammarQuestion";
-// import express from "express";
-// const generateGrammarQuestionRouter = express.Router();
+import { generateGrammarQuestion } from "../controllers/generateGrammarQuestion";
+import express from "express";
+const generateGrammarQuestionRouter = express.Router();
 
-// export default generateGrammarQuestionRouter;
+export default generateGrammarQuestionRouter;
 
 
-// generateGrammarQuestionRouter.get("/:level", generateGrammarQuestion);
+generateGrammarQuestionRouter.get("/:level", generateGrammarQuestion);
