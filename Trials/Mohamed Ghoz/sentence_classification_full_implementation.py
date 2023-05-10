@@ -15,6 +15,7 @@ from scipy.sparse import csr_matrix
 from sklearn.metrics import confusion_matrix
 
 
+
 def count_syllables(word):
     syllable_count = 0
     vowels = 'aeiouy'
@@ -46,16 +47,39 @@ def calculate_syllables(sentence, which):
     elif(which == 2):
         return num_4ormore
 
-df = pd.read_csv('dataset.csv')
+def avg_syllables(sentence):
+    count = 0
+    num = 0
+    sentence = sentence.split(" ")
+    for word in sentence:
+        num += count_syllables(word)
+        count += 1
+    return num/count
+
+def avg_word_len(sentence):
+    count = 0
+    num = 0
+    sentence = sentence.split(" ")
+    for word in sentence:
+        num += len(word)
+        count += 1
+    return num/count
+
+
+df = pd.read_csv('dataset2.csv')
 
 
 columns = {"syllables 3":[],
            "syllables 4": [],
+           "syllables avg": [],
+           "word length avg": [],
            "sentence length":[]
            }
 for value in df.itertuples():
     columns["syllables 3"].append(calculate_syllables(value.Sentence, 1))
     columns["syllables 4"].append(calculate_syllables(value.Sentence, 2))
+    columns["syllables avg"].append(avg_syllables(value.Sentence))
+    columns["word length avg"].append(avg_word_len(value.Sentence))
     columns["sentence length"].append(len(value.Sentence.split(" ")))
 
 newDF = pd.DataFrame(columns)
@@ -141,6 +165,20 @@ union = FeatureUnion([
                 #('scale', StandardScaler(with_mean=False)),
                 #('encode', OneHotEncoder(handle_unknown='ignore'))
              ]) ),
+             ('syllables_avg',
+             Pipeline([
+                ('select', ColumnSelector('syllables avg', sparse=True,
+                                          as_cat_codes=True)),
+                #('scale', StandardScaler(with_mean=False)),
+                #('encode', OneHotEncoder(handle_unknown='ignore'))
+             ]) ),
+             ('wordLenAvg',
+             Pipeline([
+                ('select', ColumnSelector('word length avg', sparse=True,
+                                          as_cat_codes=True)),
+                #('scale', StandardScaler(with_mean=False)),
+                #('encode', OneHotEncoder(handle_unknown='ignore'))
+             ]) ),
             ('sentenceLen',
              Pipeline([
                 ('select', ColumnSelector('sentence length', sparse=True,
@@ -183,7 +221,7 @@ param_grid = [
 
 gs_kwargs = dict(cv=3, n_jobs=1, verbose=2)
 X_train, X_test, y_train, y_test = \
-    train_test_split(df[['Sentence','tense_id','syllables 3','syllables 4','sentence length']], df['level_id'], test_size=0.25)
+    train_test_split(df[['Sentence','tense_id','syllables 3','syllables 4','syllables avg','word length avg','sentence length']], df['level_id'], test_size=0.25)
 grid = GridSearchCV(pipe, param_grid=param_grid, **gs_kwargs)
 grid.fit(X_train, y_train)
 
