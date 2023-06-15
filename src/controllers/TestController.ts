@@ -2,6 +2,7 @@ import { ITest, TestModel } from "../models/Test";
 import QuestionModel, { IQuestion } from "../models/Question";
 import { Request, Response } from "express";
 import UserModel,{User} from "../models/User";
+import PlacementTestModel from "../models/PlacementTest";
 
 export class TestController
 {
@@ -127,6 +128,20 @@ export class TestController
         }
     }
 
+    async getPlacementTest(req:Request,res:Response)
+    {
+        try
+        {
+            let placementTest = await PlacementTestModel.find();
+            res.json(placementTest);
+        }
+        catch(err)
+        {
+            res.json("error");
+        }
+    }
+
+    // create palcement test submition
 
     static async getStartQuestion(email:string,level:string,category:string)
     {
@@ -214,6 +229,8 @@ export class TestController
         }
         return true;
     }
+
+     
 
     
 

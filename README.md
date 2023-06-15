@@ -60,3 +60,6 @@ body Example :
     "answers" : [["mine"],["for"],["twice a"],["wrong answer"],["empty"]] 
     }
 
+
+16- http://localhost:4040/tests/placement/all (GET)
+
