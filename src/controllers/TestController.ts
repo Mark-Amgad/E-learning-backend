@@ -2,6 +2,7 @@ import { ITest, TestModel } from "../models/Test";
 import QuestionModel, { IQuestion } from "../models/Question";
 import { Request, Response } from "express";
 import UserModel,{User} from "../models/User";
+import PlacementTestModel from "../models/PlacementTest";
 
 export class TestController
 {
@@ -70,20 +71,28 @@ export class TestController
         {
             let answers:string[][] = req.body.answers;
             let testId:string = req.body.testId;
-            //await TestModel.updateOne({_id:testId},{answers:answers});
             let test = await TestModel.findById(testId).populate("questions");
             let testQuestions = test?.questions;
-            let testCategory = test?.category;
             // console.log(testQuestions);
             // console.log(testCategory);
             // get el correct answers .. 
             // if category grammar or vocabulary 
             let correctAnswers = TestController.getCorrectAnswers(testQuestions);
-            console.log(answers);
-            console.log(correctAnswers);
+            let sizeCheck = TestController.checkOnSize(answers,correctAnswers);
+            if(!sizeCheck)
+            {
+                return res.json({"error message" : "wrong answers size"});
+            }
+            //console.log(answers);
+            //console.log(correctAnswers);
             // evaluate the answers
             // update score
             let [score,totalScore] = TestController.evaluate(answers,correctAnswers);
+            await TestModel.updateOne({_id:testId},{
+                answers:answers,
+                score:score,
+                numberOfQuestions:totalScore
+            });
             res.json({"score":score,"total score":totalScore});
 
         }
@@ -119,6 +128,20 @@ export class TestController
         }
     }
 
+    async getPlacementTest(req:Request,res:Response)
+    {
+        try
+        {
+            let placementTest = await PlacementTestModel.find();
+            res.json(placementTest);
+        }
+        catch(err)
+        {
+            res.json("error");
+        }
+    }
+
+    // create palcement test submition
 
     static async getStartQuestion(email:string,level:string,category:string)
     {
@@ -152,9 +175,9 @@ export class TestController
     {
         let score = 0;
         let totalScore = 0;
-        for(let i = 0 ; i < answers.length;i++)
+        for(let i = 0 ; i < trueAnswers.length;i++)
         {
-            for(let j = 0 ; j < answers[i].length;j++)
+            for(let j = 0 ; j < trueAnswers[i].length;j++)
             {
                 if(answers[i][j] == trueAnswers[i][j])
                 {
@@ -190,6 +213,24 @@ export class TestController
         }
         return correctAnswers;
     }
+
+    static checkOnSize(answers:string[][] , trueAnswers:string[][])
+    {
+        if(answers.length != trueAnswers.length)
+        {
+            return false;
+        }
+        for(let i = 0; i < trueAnswers.length; i++)
+        {
+            if(trueAnswers[i].length != answers[i].length)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+     
 
     
 
