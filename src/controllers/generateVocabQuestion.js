@@ -21,7 +21,7 @@ export async function generateVocabQuestion(req, res, next) {
         // Set up the API request options
         const options = {
             method: "POST",
-            url: "http://164.92.176.13/fillBlank",
+            url: "http://164.92.204.79/fillBlank",
             data: {
                 sentence: sentence.text,
             },
@@ -56,6 +56,38 @@ export async function generateVocabQuestion(req, res, next) {
     }
 }
 
+
+export async function generateVocabQuestionForDemo(req, res, next) {
+    try {
+        // Get the level from the request parameters
+        const level = req.body.level;
+        const sentence = req.body.sentence;
+        // console.log(req.params.level)
+
+        if (!sentence) {
+            return res.status(404).json({ message: "Sentence not found" });
+        }
+
+        // Set up the API request options
+        const options = {
+            method: "POST",
+            url: "http://164.92.204.79/fillBlank",
+            data: {
+                sentence: sentence,
+            },
+        };
+
+        // Send the API request and get the response
+        const response = await axios.request(options);
+
+        // Send a success response
+        res.json([response.data]);
+    } catch (error) {
+        // If an error occurs, log it and pass it to the next error handling middleware
+        console.error(error);
+        next(error);
+    }
+}
 
 function getRandomIndex(arr) {
     return Math.floor(Math.random() * arr.length);

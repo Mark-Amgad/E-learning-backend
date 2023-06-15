@@ -17,7 +17,7 @@ export async function generateReadingQuestion(req, res) {
 
     const options = {
         method: 'POST',
-        url: 'http://164.92.176.13/mcq',
+        url: 'http://164.92.204.79/mcq',
         data: {
             "context": paragraph.text,
             "n_mcq": 4,
