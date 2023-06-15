@@ -11,8 +11,8 @@ export async function generateVocabQuestion(req, res, next) {
         // console.log(req.params.level)
 
         // Find a sentence with the given level
-        const sentence = await SentenceModel.find({ "level": level });
-
+        let sentence = await SentenceModel.find({ "level": level });
+        sentence = sentence[getRandomIndex(sentence)]
         // If no sentence is found, return a 404 error
         if (!sentence) {
             return res.status(404).json({ message: "Sentence not found" });
@@ -23,7 +23,7 @@ export async function generateVocabQuestion(req, res, next) {
             method: "POST",
             url: "http://164.92.176.13/fillBlank",
             data: {
-                sentence: sentence[0].text,
+                sentence: sentence.text,
             },
         };
 
@@ -56,3 +56,7 @@ export async function generateVocabQuestion(req, res, next) {
     }
 }
 
+
+function getRandomIndex(arr) {
+    return Math.floor(Math.random() * arr.length);
+}

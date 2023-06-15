@@ -6,7 +6,9 @@ const axios = require("axios");
 export async function generateReadingQuestion(req, res) {
     let level = req.params.level;
     // console.log(req.params.level)
-    let paragraph = await ParagraphModel.findOne({ "level": level })
+    let paragraphs = await ParagraphModel.find({ "level": level })
+    let indx = getRandomIndex(paragraphs);
+    let paragraph = paragraphs[indx];
     // console.log(paragraph)
     // const encodedParams = new URLSearchParams();
     // encodedParams.append("context", paragraph.text);
@@ -51,4 +53,8 @@ export async function generateReadingQuestion(req, res) {
     }).catch(function (error) {
         console.error(error);
     });
+}
+
+function getRandomIndex(arr) {
+    return Math.floor(Math.random() * arr.length);
 }
