@@ -13,6 +13,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline, FeatureUnion
 from scipy.sparse import csr_matrix
 from sklearn.metrics import confusion_matrix
+from sklearn.ensemble import RandomForestClassifier
 
 
 
@@ -190,24 +191,24 @@ union = FeatureUnion([
 
 pipe = Pipeline([
     ('union', union),
-    ('clf', MultinomialNB())
+    ('clf',  RandomForestClassifier(n_estimators= 10000, criterion="entropy"))
 ])
 
 param_grid = [
+    # {
+    #     'union__text__vect': [TfidfVectorizer(sublinear_tf=True, min_df=1, norm='l2', encoding='latin-1', ngram_range=(1, 2), stop_words='english')],
+    #     'clf': [SGDClassifier(max_iter=500)],
+    #     'union__text__vect__ngram_range': [(1,1), (2,5)],
+    #     'union__text__vect__analyzer': ['word','char_wb'],
+    #     'clf__alpha': np.logspace(-5, 0, 6),
+    #     #'clf__max_iter': [500],
+    # },
     {
-        'union__text__vect': [TfidfVectorizer(sublinear_tf=True, min_df=1, norm='l2', encoding='latin-1', ngram_range=(1, 2), stop_words='english')],
-        'clf': [SGDClassifier(max_iter=500)],
-        'union__text__vect__ngram_range': [(1,1), (2,5)],
-        'union__text__vect__analyzer': ['word','char_wb'],
-        'clf__alpha': np.logspace(-5, 0, 6),
-        #'clf__max_iter': [500],
-    },
-    {
-        'union__text__vect': [TfidfVectorizer(sublinear_tf=True, min_df=1, norm='l2', encoding='latin-1', ngram_range=(1, 2), stop_words='english')],
-        'clf': [MultinomialNB()],
-        'union__text__vect__ngram_range': [(1,1), (2,5)],
-        'union__text__vect__analyzer': ['word','char_wb'],
-        'clf__alpha': np.logspace(-4, 2, 7),
+        'union__text__vect': [TfidfVectorizer(sublinear_tf=True, min_df=1, norm='l2', encoding='latin-1', stop_words='english')],
+        'clf': [ RandomForestClassifier(n_estimators= 10000, criterion="entropy")],
+        'union__text__vect__ngram_range': [(1,2), (2,5)],
+        'union__text__vect__analyzer': ['char_wb'],
+        # 'clf__alpha': [0.002],
     },
     #{        # NOTE: does NOT support sparse matrices!
     #    'union__text__vect': [TfidfVectorizer(sublinear_tf=True,
