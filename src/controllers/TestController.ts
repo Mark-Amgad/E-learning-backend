@@ -141,6 +141,20 @@ export class TestController
         }
     }
 
+    async submitPlacementTest(req:Request,res:Response)
+    {
+        try
+        {
+            // evaluate test and get score
+            // convert score to level
+            // store the level in the user data
+        }
+        catch(err)
+        {
+            res.json("error");
+        }
+    }
+
     // create palcement test submition
 
     static async getStartQuestion(email:string,level:string,category:string)

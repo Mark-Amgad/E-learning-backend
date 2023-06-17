@@ -63,3 +63,5 @@ body Example :
 
 16- http://localhost:4040/tests/placement/all (GET)
 
+17- http://localhost:4040/tests/markamgad5@gmail.com (GET)
+
