@@ -1,6 +1,7 @@
 
 import { SpeechClient } from "@google-cloud/speech";
 import credentials from '../../speech2text-credentials.json';
+import SentenceModel from "../models/Sentence";
 
 // To Be removed later when data is present in db
 export const sentences = [
@@ -43,7 +44,10 @@ export class Speech2TextService {
             .join('\n');
 
         console.log(`Transcription: ${transcription}`);
-        const data = this.checkAnswer(transcript, sentences[speechData.id])
+
+        const sentence = await SentenceModel.findById(speechData.id)
+        if(!sentence) throw Error()
+        const data = this.checkAnswer(transcript, sentence.text)
 
         return data;
     }

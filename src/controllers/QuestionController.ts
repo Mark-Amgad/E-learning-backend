@@ -5,18 +5,12 @@ import { McqCompleteQuestion } from "../models/McqComQuestion";
 import { ListeningReadingQuestion } from "../models/ListeningReadingQuestion";
 
 import express from "express";
-import { Speech2TextService, sentences } from "../services/speech2textService";
 
 
 
 export default class QuestionController
 {
     // I will update this module to be compatible with the general table
-    speech2TextService: Speech2TextService;
-
-    constructor() {
-        this.speech2TextService = new Speech2TextService();
-    }
 
     async getAllQuestions(req:express.Request,res:express.Response){
         try
@@ -120,23 +114,6 @@ export default class QuestionController
         catch(err)
         {
             res.send("error ");
-        }
-    }
-
-    async getSentence(req: express.Request, res: express.Response) {
-        const id = Math.floor(Math.random() * sentences.length);
-        res.send({ sentence: sentences[id], id })
-    }
-
-    async evaluateSpeech(req: express.Request, res: express.Response) {
-        try {
-            console.log('here', req.body)
-            const result = await this.speech2TextService.transcriptSpeech(req.body);
-            res.send({ data: result });
-        } catch (err) {
-            // handling errors
-            console.log(err)
-            res.status(500).send('Error');
         }
     }
 }
