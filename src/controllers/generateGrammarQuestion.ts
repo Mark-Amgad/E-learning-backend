@@ -112,6 +112,48 @@ export async function generateGrammarQuestionDemo(req: express.Request, res: exp
     }
 }
 
+export async function generateGrammarQuestionDemoV2(req: express.Request, res: express.Response) {
+    try {
+        const level: string = req.body.level;
+        const sentence: string = req.body.sentence;
+        // console.log(level);
+        // console.log(randomTopic);
+        const randomTopic: string = getTopicByLevel(level);
+
+        const sentenceAns = await getSentenceByTopicForDemo(randomTopic, level, sentence);
+        // console.log(sentenceAns);
+
+        if (!sentenceAns) {
+            console.log("Sentence not found");
+            return res.status(404).json({ message: "Can't make question with that topic and sentence" });
+        }
+
+        const isTense: boolean = randomTopic.split("/")[0].toLowerCase() === "tense";
+        let generatedQuestion: any = null;
+
+        if (isTense) {
+            const randomNum: number = Math.floor(Math.random() * 2) + 1;
+            if (randomNum === 1) {
+                generatedQuestion = await generateMcqQ(sentenceAns.sentence);
+            } else {
+                generatedQuestion = await generateTorFQ(sentenceAns.sentence);
+            }
+        } else {
+            generatedQuestion = {
+                question: sentenceAns.sentence,
+                mcq: shuffleArray(randomTopic.split("/")),
+                answer: sentenceAns.answer,
+            };
+        }
+
+        // console.log(generatedQuestion);
+
+        res.json([generatedQuestion]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
 /**
  * Retrieves a sentence and its answer based on the topic and level.
  * @param topic - The topic of the sentence.
