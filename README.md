@@ -65,3 +65,15 @@ body Example :
 
 17- http://localhost:4040/tests/markamgad5@gmail.com (GET)
 
+18- http://localhost:4040/tests/placement/submit (POST)
+
+    input : {
+        "userId": "63d588567df4d93ab854a8b4",
+        "answers": ["","",...]
+    }
+
+    output : 
+    {
+        "user" : {}
+    }
+
