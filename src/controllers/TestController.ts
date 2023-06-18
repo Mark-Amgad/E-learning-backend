@@ -145,9 +145,45 @@ export class TestController
     {
         try
         {
+            let answers:string[] = req.body.answers;
+            let userId:string = req.body.userId;
+            // getting the correct answers
+            let placementTest = await PlacementTestModel.find({},{"answer":1,_id:0});
+            let correctAnswers:string[] =[];
+            placementTest.forEach((q)=>{correctAnswers.push(q.answer)});
+            //console.log(correctAnswers);
+
+            if(correctAnswers.length != answers.length)
+            {
+                return res.json({"message":"There is missing answers in the answers array(LENGTH)"});
+            }
+            // calculate score
+            let score = 0;
+            for(let i = 0 ; i<correctAnswers.length;i++)
+            {
+                if(correctAnswers[i] == answers[i])
+                {
+                    score++;
+                }
+            }
+            // map score to level
+            let level = 1;
+            if(score >= 0 && score <= 20) level = 1;
+            else if(score >= 21 && score <= 30) level = 2;
+            else if(score >= 31 && score <= 40) level = 3;
+            else if(score >= 41 && score <= 45) level = 4;
+            else if(score >= 46 && score <= 49) level = 5;
+            else if(score == 50) level = 6;
+            //console.log(level);
+            // update the user and return it
+            let user = await UserModel.findByIdAndUpdate(userId,{"level":level},{ new: true });
+            await user?.save();
+            return res.json({"user":user});
             // evaluate test and get score
+
             // convert score to level
             // store the level in the user data
+            // return the user
         }
         catch(err)
         {

@@ -12,3 +12,4 @@ testRouter.get("/:email",testController.getTests);
 testRouter.post("/submit",testController.submitTest);
 testRouter.get("/get/:test_id",testController.getTest);
 testRouter.get("/placement/all",testController.getPlacementTest);
+testRouter.post("/placement/submit",testController.submitPlacementTest);
