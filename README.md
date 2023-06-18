@@ -72,3 +72,8 @@ body Example :
         "answers": ["","",...]
     }
 
+    output : 
+    {
+        "user" : {}
+    }
+
