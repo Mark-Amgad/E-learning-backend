@@ -245,7 +245,8 @@ export class TestController
         for(let i = 0; i < questions.length; i++)
         {
             if(questions[i].category == "Vocabulary"
-            || questions[i].category == "Grammar")
+            || questions[i].category == "Grammar"
+            || questions[i].category == "Listening")
             {
                 let answer = questions[i].answer;
                 correctAnswers.push([answer]);
