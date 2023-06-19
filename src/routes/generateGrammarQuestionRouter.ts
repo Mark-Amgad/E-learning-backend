@@ -6,4 +6,4 @@ export default generateGrammarQuestionRouter;
 
 
 generateGrammarQuestionRouter.get("/:level", generateGrammarQuestion);
-generateGrammarQuestionRouter.post("/", generateGrammarQuestionDemoV2);
+generateGrammarQuestionRouter.post("/", generateGrammarQuestionDemo);
