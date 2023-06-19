@@ -30,26 +30,29 @@ export async function generateReadingQuestion(req, res) {
         let questions = response.data["questions"];
         // console.log(questions)
         let insertedQuestions = []
-
-        for (let ques of questions) {
-            insertedQuestions.push({
-                question: ques.question,
-                choices: ques.mcq,
-                answer: ques.answer,
-            })
+        if (questions.length === 5) {
+            for (let ques of questions) {
+                insertedQuestions.push({
+                    question: ques.question,
+                    choices: ques.mcq,
+                    answer: ques.answer,
+                })
+            }
+            let readingQuestion = {
+                question: paragraph.text,
+                subQuestions: insertedQuestions,
+                choices: [],
+                answer: "",
+                type: "MCQ",
+                category: "Reading",
+                level: level,
+                url: ""
+            }
+            Question.collection.insertOne(readingQuestion)
+            res.json("Question Generated successfully");
+        } else {
+            res.json("Generated Question less than 5")
         }
-        let readingQuestion = {
-            question: paragraph.text,
-            subQuestions: insertedQuestions,
-            choices: [],
-            answer: "",
-            type: "MCQ",
-            category: "Reading",
-            level: level,
-            url: ""
-        }
-        Question.collection.insertOne(readingQuestion)
-        res.json("Question Generated successfully");
     }).catch(function (error) {
         console.error(error);
     });
