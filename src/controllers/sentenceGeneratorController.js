@@ -35,7 +35,8 @@ export async function getSentence(req, res) {
 }
 
 export function classifySentence(req, res) {
-  let sentence = req.body.sentence;
+  let sentence = req.params.sentence;
+  console.log(sentence);
   let level = "Cannot classify";
   let text;
   const python = spawn('python', [path.resolve('src/python/sentenceClassifier.py'), sentence]);
@@ -46,7 +47,7 @@ export function classifySentence(req, res) {
     console.log(text);
     level = text.split("+")[0]
     console.log(level);
-    res.send(level);
+    res.send({level:level});
     let tense = JSON.parse(text.split("+")[1])
   });
 

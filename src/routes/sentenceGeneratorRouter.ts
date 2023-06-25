@@ -5,5 +5,5 @@ const textToSpeechRouter = express.Router();
 export default textToSpeechRouter;
 
 
-textToSpeechRouter.post("/level",classifySentence);
+textToSpeechRouter.get("/level/:sentence",classifySentence);
 textToSpeechRouter.get("/",getSentence);
