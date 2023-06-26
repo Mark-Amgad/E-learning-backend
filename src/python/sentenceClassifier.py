@@ -80,6 +80,54 @@ def tense_detect(sentence):
             tenses_set.add(entry)
     return tenses_set
 
+def count_syllables(word):
+    syllable_count = 0
+    vowels = 'aeiouy'
+    if word[0] in vowels:
+        syllable_count += 1
+    for index in range(1, len(word)):
+        if word[index] in vowels and word[index - 1] not in vowels:
+            syllable_count += 1
+    if word.endswith('e'):
+        syllable_count -= 1
+    if word.endswith('le') and len(word) > 2 and word[-3] not in vowels:
+        syllable_count += 1
+    if syllable_count == 0:
+        syllable_count += 1
+    return syllable_count
+
+def calculate_syllables(sentence, which):
+    num_1to3 = 0
+    num_4ormore = 0
+    sentence = sentence.split(" ")
+    for word in sentence:
+        num = count_syllables(word)
+        if num > 3:
+            num_4ormore += 1
+        else:
+            num_1to3 +=1
+    if (which == 1):
+        return num_1to3
+    elif(which == 2):
+        return num_4ormore
+
+def avg_syllables(sentence):
+    count = 0
+    num = 0
+    sentence = sentence.split(" ")
+    for word in sentence:
+        num += count_syllables(word)
+        count += 1
+    return num/count
+
+def avg_word_len(sentence):
+    count = 0
+    num = 0
+    sentence = sentence.split(" ")
+    for word in sentence:
+        num += len(word)
+        count += 1
+    return num/count
 
 class ColumnSelector(BaseEstimator, TransformerMixin):
 
@@ -114,9 +162,9 @@ category_id_df = df[['Level', 'level_id']].drop_duplicates().sort_values('level_
 category_to_id = dict(category_id_df.values)
 id_to_category = dict(category_id_df[['level_id', 'Level']].values)
 grid = pickle.load(open(os.path.dirname(full_path)+"\Model.sav", 'rb'))
-X_train, X_test, y_train, y_test = \
-    train_test_split(df[['Sentence','tense_id']], df['level_id'], test_size=0.25)
-y_pred = grid.predict(X_test)
+# X_train, X_test, y_train, y_test = \
+#     train_test_split(df[['Sentence','tense_id','syllables 3','syllables 4','syllables avg','word length avg','sentence length']], df['level_id'], test_size=0.25)
+# y_pred = grid.predict(X_test)
 
 # print("Accuracy " + str(np.mean(y_pred == y_test)))
 # conf_mat = confusion_matrix(y_test, y_pred)
@@ -162,6 +210,11 @@ for t in tense:
 tense_string = tense_string[0:-1]
 tense_string += "]"
 id = mapping[tense[0]]
-example = pd.DataFrame([[sentence,id]],columns=["Sentence","tense_id"])
+syllables3 = calculate_syllables(sentence, 1)
+syllables4 = calculate_syllables(sentence, 2)
+avgSyllables = avg_syllables(sentence)
+avgWordLen = avg_word_len(sentence)
+sentenceLen = len(sentence.split(" "))
+example = pd.DataFrame([[sentence,id,syllables3,syllables4,avgSyllables,avgWordLen,sentenceLen]],columns=["Sentence","tense_id","syllables 3","syllables 4","syllables avg","word length avg","sentence length"])
 predicted = grid.predict(example)
 print(id_to_category[predicted[0]] + "+" + tense_string)
