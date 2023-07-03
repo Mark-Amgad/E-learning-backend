@@ -9,6 +9,7 @@ import sentenceGeneratorRouter from "./sentenceGeneratorRouter";
 import generateReadingQuestionRouter from "./generateReadingQuestionRouter";
 import generateVocabQuestionRouter from "./generateVocabQuestionRouter";
 import generateGrammarQuestionRouter from "./generateGrammarQuestionRouter";
+import generateDistractorsRouter from "./generateDistractorsRouter";
 
 const Router = express.Router();
 export default Router;
@@ -23,5 +24,6 @@ Router.use("/generateReadingQuestion", generateReadingQuestionRouter);
 Router.use("/generateVocabQuestion", generateVocabQuestionRouter);
 Router.use("/generateGrammarQuestion", generateGrammarQuestionRouter);
 Router.use("/generateListeningQuestion", textToSpeechRouter);
+Router.use("/generateDistractors", generateDistractorsRouter);
 
 

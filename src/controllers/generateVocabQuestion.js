@@ -31,8 +31,8 @@ export async function generateVocabQuestion(req, res, next) {
         const response = await axios.request(options);
 
         // Extract the question, multiple-choice options, and answer from the response data
-        const { question, mcq, answer } = response.data;
-
+        let { question, mcq, answer } = response.data;
+        question = replaceWordWithDots(question, answer);
         // Create a new vocabulary question object
         const vocabQuestion = new QuestionModel({
             question,
@@ -56,6 +56,15 @@ export async function generateVocabQuestion(req, res, next) {
     }
 }
 
+function replaceWordWithDots(str, word) {
+    // Create a regular expression pattern with word boundaries
+    var pattern = new RegExp('\\b' + word + '\\b', 'gi');
+
+    // Replace the word with dots
+    var replacedString = str.replace(pattern, ' ....... ');
+
+    return replacedString;
+}
 
 export async function generateVocabQuestionForDemo(req, res, next) {
     try {
@@ -79,7 +88,7 @@ export async function generateVocabQuestionForDemo(req, res, next) {
 
         // Send the API request and get the response
         const response = await axios.request(options);
-
+        response.data.question = replaceWordWithDots(response.data.question, response.data.answer);
         // Send a success response
         res.json([response.data]);
     } catch (error) {

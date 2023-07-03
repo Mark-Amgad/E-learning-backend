@@ -2,7 +2,7 @@ import gtts from "node-gtts";
 import path from "path";
 import fs from "fs";
 import SentenceModel from "../models/Sentence";
-import Question from "../models/Question";
+import QuestionModel from "../models/Question";
 var g = gtts("en");
 
 
@@ -22,7 +22,8 @@ export async function GetAudio(req, res) {
   filepath = path.join(__dirname + "/../audio", text + '.mp3');
   console.log(filepath);
   g.save(filepath, text, async function () {
-    let object = new Question({
+    let object = new QuestionModel({
+      question: text + '.mp3',
       url: "src/audio/" + text + '.mp3',
       level: level,
       answer: text,
@@ -43,12 +44,13 @@ export function audio(req, res) {
     var readStream = fs.createReadStream(filepath);
     readStream.pipe(res);
 
-  }, 500)
+  }, 1000)
 }
 
 export function findAudio(req, res) {
   let name = req.params.path;
-  filepath = path.join(__dirname + "/../audio", name + '.mp3');
+  name=name.split('_').join(' ');
+  let filepath = path.join(__dirname +"/../audio", name);
   var readStream = fs.createReadStream(filepath);
   readStream.pipe(res);
 
