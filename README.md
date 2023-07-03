@@ -2,6 +2,15 @@
 
 Graduation project 2022
 
+## Used technologies
+* Nodejs
+* Express
+* TypeScript
+* python
+* MongoDB (ORM : mongoose)
+* JWT
+* Postman
+
 ## Ready endpoints
 
 1- http://localhost:4040/mcq
